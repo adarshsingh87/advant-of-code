@@ -42,7 +42,6 @@ function recurrse(matrix: string[][]) {
       }
     });
   });
-				console.log(matrix)
   if (answer === 0) {
     return 0;
   } else {

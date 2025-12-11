@@ -2,45 +2,45 @@ import fs from "fs";
 
 const input = fs.readFileSync("input.txt", "utf8");
 
-// const input = `123 328  51 64
-//  45 64  387 23
+// const input = `123 328  51 64 
+//  45 64  387 23 
 //   6 98  215 314
 // *   +   *   +  `;
 
-const lines = input.split("\n").filter((e) => e !== "");
-
-const operations = lines
-  .pop()
-  ?.split(" ")
-  .filter((e) => e !== " ")
+const lines = input
+  .split("\n")
   .filter((e) => e !== "")
-  .map((op) => op.trim());
+  .map((e) => e.split("").reverse().join(""));
 
-const numbers = lines.map((line) =>
-  line
-    .trim()
-    .split(" ")
-    .filter((e) => e !== " ")
-    .filter((e) => e !== "")
-    .map((n) => Number(n.trim())),
-);
+const operations = lines.pop();
 
 let answer = 0;
 
-operations?.forEach((op, i) => {
-  const vals: number[] = [];
-  numbers.forEach((nums) => {
-    vals.push(nums[i] || 0);
+let numberToOperate: string[] = [];
+
+for (let i = 0; i < operations.length; i++) {
+  let toPush = "";
+
+  lines.forEach((e) => {
+    toPush += e[i] || " ";
   });
-  if (op === "*") {
-    const temp = vals.reduce((a, b) => a * b, 1);
-    console.log(temp, vals);
-    answer += temp;
-  } else if (op === "+") {
-    const temp = vals.reduce((a, b) => a + b, 0);
-    console.log(temp, vals);
-    answer += temp;
+
+  numberToOperate.push(toPush.replaceAll(" ", ""));
+  const operator = operations[i];
+  if (operator === "*" || operator === "+") {
+    if (operator === "*") {
+      const temp = numberToOperate
+        .map(Number)
+        .reduce((a, b) => (a || 1) * (b || 1), 1);
+      console.log(temp, numberToOperate);
+      answer += temp;
+    } else if (operator === "+") {
+      const temp = numberToOperate.map(Number).reduce((a, b) => a + b, 0);
+      console.log(temp, numberToOperate);
+      answer += temp;
+    }
+    numberToOperate = [];
   }
-});
+}
 
 console.log(answer);
